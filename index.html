@@ -33,3 +33,205 @@
         </script>
     </body>
 </html>
+
+<script>
+    const tipoEstado = {
+        zero : 'zero',
+        positivo : 'positivo',
+        negativo : 'negativo'
+    }
+
+    //fazer a funcao que retorna o tipo de estado e altera o q foi passado
+
+    function nrz_level(sinal,tam){
+        tipoEstado *estado;
+        for(var i =0; i < tam;i++){
+            if(sinal[i] == 0){
+                estado[i] = positivo;
+            }else if(sinal[i] == 1){
+                estado[i] = negativo;
+            }
+        }
+    }
+
+    function nrz_invert(sinal,tam){
+        tipoEstado *estado;
+        tipoEstado *estadoAnterior = positivo;
+        for(var i =0; i < tam;i++){
+            if(sinal[i] == 1){
+                estado[i] = inverte(estadoAnterior); 
+            }else{
+                estado[i] = estadoAnterior;
+            }
+        }
+        
+
+    }
+
+    function ami(sinal,tam){
+        tipoEstado *estado;
+        tipoEstado *estadoAnterior = positivo; // que seria positivo
+        for(var i =0; i < tam;i++){
+            if(sinal[i] == 1){
+                estado[i] = inverte(estadoAnterior); 
+            }else if(sinal[i] == 0){
+                estado[i] = zero;
+            }
+        }
+        
+    }
+    function pseudoternary(sinal,tam){
+        tipoEstado *estado;
+        tipoEstado *estadoAnterior = positivo; // que seria positivo
+        for(var i =0; i < tam;i++){
+            if(sinal[i] == 0){
+                estado[i] = inverte(estadoAnterior); 
+            }else if(sinal[i] == 1){
+                estado[i] = positivo;
+            }
+        }
+    }
+
+    function manchester(sinal,tam){
+        tipoEstado *estado;
+        for(var i =0; i < tam;i++){
+            if(sinal[i] == 0){
+                estado[i] = positivo; 
+                estado[i+1] = negativo;
+    
+            }else if(sinal[i] == 1){
+                estado[i] = negativo;
+                estado[i+1] = positivo;
+            }
+        }
+    }
+
+</script>
+//enum tipoEstado = {zero,positivo,negativo}
+
+
+
+
+tipoEstado inverte(tipoEstado *sinal){
+    if(sinal == positivo){
+        return negativo;
+    }
+    if(sinal == negativo){
+        return positivo;
+    }
+}
+
+//sao metodos polares
+nrz_level(int sinal[]){
+    tipoEstado estado[];
+    for(int i = 0; i< sinal.tam ; i++){
+        if(sinal[i] == 0){
+            estado[i] = positivo;
+        }else if(sinal[i] == 1){
+            estado[i] = negativo;
+        }
+        ou 
+        estado[i] = sinal[i];
+    }
+    a voltagem eh igual ao estado, entao se eh 0 o estado eh 0 , eh normal
+
+}
+
+
+
+exemplo:
+sinal = [0,1,0,0,1,1,1,0]
+estado = [0,1,1,1,0,1,0,0]
+
+nrz_invert(int sinal[]){
+    tipoEstado estado[];
+    tipoEstado estadoAnterior = positivo; // que seria positivo
+    for(int i = 0; i< sinal.tam ; i++){
+        
+        if(sinal[i] == 1){
+            estado[i] = inverte(estadoAnterior); 
+        }else{
+            estado[i] = estadoAnterior;
+        }
+    }
+
+    se o proximo sinal for 1 ele inverte o estado, se o proximo sinal for 0 ele mantem
+
+}
+
+
+//metodos bipolares
+//usa tres niveis de voltagem, positivo, negativo e zero
+//A voltagem de um elemento eh zero, enquanto a voltagem fica alternando entre positivos e negativos
+
+ami(int sinal[]){
+    tipoEstado estado[];
+    tipoEstado estadoAnterior = positivo; // que seria positivo
+
+    for(int i = 0; i< sinal.tam ; i++){
+        if(sinal[i] == 1){
+            estado[i] = inverte(&estadoAnterior); 
+        }else if(sinal[i] == 0){
+            estado[i] = zero;
+        }
+    }
+
+    quando o sinal eh 0 , o estado eh 0, quando o sinal eh 1 ele fica alternando entre positivo e negativo
+    salvando o ultimo estado de quando o sinal for 1, para poder ficar alternando
+}
+
+//o contrario do ami
+pseudoternary(int sinal[]){
+
+    tipoEstado estado[];
+    tipoEstado estadoAnterior = positivo; // que seria positivo
+
+    for(int i = 0; i< sinal.tam ; i++){
+        if(sinal[i] == 0){
+            estado[i] = inverte(&estadoAnterior); 
+        }else if(sinal[i] == 1){
+            estado[i] = positivo;
+        }
+    }
+
+    acho que eh o contrario do ami
+    quando o sinal eh 1 , o estado eh 1, quando o sinal for 0 ele fica alternando entre positivo e negativo
+    salvando o ultimo estado de quando o sinal for 0, para poder ficar alternando
+ 
+}
+//bifasico
+
+manchester(int sinal[]){
+    //tamanho do vetor estado dobra, o tamanho q ele duraria divide pela metade
+    tipoEstado estado[];
+
+    for(int i = 0; i< sinal.tam ; i++){
+        
+        if(sinal[i] == 0){
+            estado[i] = positivo; 
+            estado[i+1] = negativo;
+
+        }else if(sinal[i] == 1){
+            estado[i] = negativo;
+            estado[i+1] = positivo;
+        }
+
+    }
+
+    A duração do estado é dividida em duas metades. A voltagem permanece em um nível durante a primeira metade e se desloca para o outro nível na segunda metade. 
+
+    esse eh mais dificil
+    o sinal 0 representa um descida do estado, se for seguido de outro zero precisa subir rapidamente pra depois descer dnv
+    o sinal 1 representa a subida do estado, se for seguido de outro um tem q descer rapidamente para subir dnv
+}
+
+machester_diferencial(int sinal[]){
+
+    
+    ele se diferencia do manchester pois ele muda o estado dependendo do proximo sinal
+    se o proximo sinal for 1 ele nao inverte o estado
+    se o proximo sinal for 0 ele inverte o estado
+    achei confuso esse
+
+}
+
