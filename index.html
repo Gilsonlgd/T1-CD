@@ -35,82 +35,116 @@
 </html>
 
 <script>
-    const tipoEstado = {
-        zero : 'zero',
-        positivo : 'positivo',
-        negativo : 'negativo'
+   
+    function inverte(sinal){
+        return sinal * -1;
     }
 
-    //fazer a funcao que retorna o tipo de estado e altera o q foi passado
 
-    function nrz_level(sinal,tam){
-        tipoEstado *estado;
-        for(var i =0; i < tam;i++){
+    function nrz_level(sinal){
+        var estado = [];
+        for(var i =0; i < sinal.length;i++){
             if(sinal[i] == 0){
-                estado[i] = positivo;
+                estado[i] = 1;
             }else if(sinal[i] == 1){
-                estado[i] = negativo;
+                estado[i] = -1;
             }
         }
+        return estado;
     }
 
-    function nrz_invert(sinal,tam){
-        tipoEstado *estado;
-        tipoEstado *estadoAnterior = positivo;
-        for(var i =0; i < tam;i++){
+    function nrz_invert(sinal){
+        var estado = [];
+        var estadoAnterior = 1;
+        for(var i =0; i < sinal.length;i++){
             if(sinal[i] == 1){
                 estado[i] = inverte(estadoAnterior); 
+                estadoAnterior = estado[i];
             }else{
                 estado[i] = estadoAnterior;
             }
         }
-        
+        return estado;
+
 
     }
 
-    function ami(sinal,tam){
-        tipoEstado *estado;
-        tipoEstado *estadoAnterior = positivo; // que seria positivo
-        for(var i =0; i < tam;i++){
+    function ami(sinal){
+        var estado = [];
+        var estadoAnterior = 1;
+        for(var i =0; i < sinal.length;i++){
             if(sinal[i] == 1){
                 estado[i] = inverte(estadoAnterior); 
+                estadoAnterior = estado[i];
             }else if(sinal[i] == 0){
-                estado[i] = zero;
+                estado[i] = 0;
             }
         }
+        return estado;
+
         
     }
-    function pseudoternary(sinal,tam){
-        tipoEstado *estado;
-        tipoEstado *estadoAnterior = positivo; // que seria positivo
-        for(var i =0; i < tam;i++){
+
+    function pseudoternary(sinal){
+        var estado = [];
+        var estadoAnterior = 1;
+        for(var i =0; i < sinal.length;i++){
             if(sinal[i] == 0){
                 estado[i] = inverte(estadoAnterior); 
+                estadoAnterior = estado[i];
             }else if(sinal[i] == 1){
-                estado[i] = positivo;
+                estado[i] = 1;
             }
         }
+        return estado;
+
     }
 
-    function manchester(sinal,tam){
-        tipoEstado *estado;
-        for(var i =0; i < tam;i++){
+    function manchester(sinal){
+        var estado = [];
+        for(var i =0; i < sinal.length;i++){
             if(sinal[i] == 0){
-                estado[i] = positivo; 
-                estado[i+1] = negativo;
+                estado[i] = 1; 
+                estado[i+1] = -1;
     
             }else if(sinal[i] == 1){
-                estado[i] = negativo;
-                estado[i+1] = positivo;
+                estado[i] = -1;
+                estado[i+1] = 1;
             }
         }
+        return estado;
+
+    }
+   
+
+    function manchester_diferencial(sinal){
+        var estado = []; 
+        var estadoAnterior = 1;
+        var estadoParcial;
+        for(var i =0; i < sinal.length; i++){
+            if(sinal[i] == 0){
+                estadoParcial = inverte(estadoAnterior);
+            }else{
+                estadoParcial = estadoAnterior;
+            }
+    
+            if(estadoParcial == 0){
+                estado[i] = 1; 
+                estado[i+1] = -1;
+            }else if(estadoParcial == 1){
+                estado[i] = -1;
+                estado[i+1] = 1;
+            }
+            estadoAnterior = estadoParcial;
+        }
+        return estado;
     }
 
 </script>
+
+
+
 //enum tipoEstado = {zero,positivo,negativo}
-
-
-
 
 tipoEstado inverte(tipoEstado *sinal){
     if(sinal == positivo){
