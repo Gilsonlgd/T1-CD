@@ -4,32 +4,78 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Exemplo de Gráfico:</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>    
     </head>
 
     <body>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-        <canvas class="line-chart"></canvas>
-
-        <script>
-            var ctx = document.getElementsByClassName("line-chart")[0];
-            const labels = [0,1,0,0,1,1,0,0,1,0,1,0];
-
-            var chartGraph = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Gráfico',
-                        data: [0,1,0,0,1,1,0,0,1,0,1,0],
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.0
-                    }]
-                },
-                options: {
-                   
-                }
-            });
-        </script>
+        <header>
+            <div class="container-header">
+                <div class="row title-header">
+                    <h1>Códigos de Linha:</h1>
+                    <p>Selecione um algoritmo de código de linha e digite o sinal que deseja transmitir:</p>
+                </div>
+            </div>
+        </header>
+        <div id="myPlot"></div>
     </body>
+
+    <script>
+        let intervalLen = 1;
+        let signalSequence = [0, 1, 0, 0, 0, 0, -1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0];
+        let signalIntervals = [...Array(signalSequence.length).keys()];
+        signalIntervals = signalIntervals.map((x) => { return x * intervalLen});
+
+        const data = {
+            x: signalIntervals, 
+            y: signalSequence,
+            mode: 'lines',
+            type: 'scatter',
+            line: {
+                color: '#295264',
+                shape: 'hv',
+                step: 'before',
+                width: 3
+            }
+        };
+
+        const layout = {
+            xaxis: {
+                title: 'Eixo X',
+                range: [0, signalIntervals.length],
+                dtick: 1
+            },
+            yaxis: {
+                title: 'Eixo Y',
+                range: [-1.5, 1.5]
+            }
+        };
+
+        const config = {
+            responsive: true
+        };
+
+        Plotly.newPlot('myPlot', [data], layout, config);
+    </script>
+
+    <style>
+        .container-header {
+            display: flex;
+            font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: #295264;
+            color: #b9d9b4;
+            height: 120px;
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+            /* Define o espalhamento da sombra */
+            box-shadow: 0 4px 6px 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+    </style>
+      
 </html>
