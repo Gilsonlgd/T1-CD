@@ -21,9 +21,10 @@
         <div class="input-card">
             <div class="row">
                 <div class="col-12">
-                    <label class="text-xl" for="frutas">Escolha uma método:</label>
-                    <select class="base-dropdown text-lg" id="frutas" name="frutas"
+                    <label class="text-xl" for="tipos">Escolha uma método:</label>
+                    <select class="base-dropdown text-lg" id="tipos" name="tipos"
                         onchange="handleSelectType(this.value)">
+                        <option value="-">Sinal Original</option>
                         <option value="NRZ Level">NRZ-L</option>
                         <option value="NRZ Invert">NRZI</option>
                         <option value="AMI">AMI</option>
@@ -207,8 +208,8 @@
 <script>
     // mounted
     let signalSequence = [0, 1, 0, 0, 1, 1, 1, 0];
-    let selectedType = 'NRZ Level';
-    this.drawGraph(this.nrz_level(signalSequence));
+    let selectedType = '-';
+    this.drawGraph(signalSequence);
 </script>
 
 <script>
@@ -223,7 +224,11 @@
         let estadoSequence = [];
         const selectedValue = value;
 
-        if (selectedValue === "NRZ Level") estadoSequence = this.nrz_level(signalSequence);
+        if (selectedValue === "-") {
+            estadoSequence = signalSequence;
+            estadoSequence.push(signalSequence[signalSequence.length - 1]);
+        }
+        else if (selectedValue === "NRZ Level") estadoSequence = this.nrz_level(signalSequence);
         else if (selectedValue === "NRZ Invert") estadoSequence = this.nrz_invert(signalSequence);
         else if (selectedValue === "AMI") estadoSequence = this.ami(signalSequence);
         else if (selectedValue === "Pseudoternary") estadoSequence = this.pseudoternary(signalSequence);
