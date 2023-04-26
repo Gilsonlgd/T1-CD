@@ -1,157 +1,179 @@
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Exemplo de Gráfico:</title>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>    
-    </head>
 
-    <body>
-        <header>
-            <div class="container-header">
-                <div class="row title-header">
-                    <h1>Códigos de Linha:</h1>
-                    <p>Selecione um algoritmo de código de linha e digite o sinal que deseja transmitir:</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Exemplo de Gráfico:</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="container-header">
+            <div class="row title-header">
+                <h1>Códigos de Linha</h1>
+                <p>Selecione um algoritmo de código de linha e digite o sinal que deseja transmiti!</p>
+            </div>
+        </div>
+    </header>
+    <div class="container-input">
+        <div class="input-card">
+            <div class="row">
+                <div class="col-12">
+                    <label class="text-xl" for="frutas">Escolha uma método:</label>
+                    <select class="base-dropdown text-lg" id="frutas" name="frutas"
+                        onchange="handleSelectType(this.value)">
+                        <option value="NRZ Level">NRZ-L</option>
+                        <option value="NRZ Invert">NRZI</option>
+                        <option value="AMI">AMI</option>
+                        <option value="Pseudoternary">Pseudoternary</option>
+                        <option value="Manchester">Manchester</option>
+                        <option value="Manchester Diferencial">Manchester Diferencial</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="text-xl" for="entrada">Sinal</label>
+                    <input class="base-input text-lg" type="text" id="entrada" placeholder="Digite seu Sinal"
+                        oninput="handleChangeInput(this.value)">
                 </div>
             </div>
-        </header>
-        <div id="myPlot"></div>
-    </body>
+        </div>
+    </div>
+    <div id="myPlot"></div>
+</body>
 
-    <script>
-    
-        function inverte(sinal){
-            return sinal * -1;
-        }
+<script>
 
-
-        function nrz_level(sinal){
-            var estado = [...sinal];
-            for(var i =0; i < sinal.length;i++){
-                if(sinal[i] == 0){
-                    estado[i] = 1;
-                }else if(sinal[i] == 1){
-                    estado[i] = -1;
-                }
-            }
-            estado.push(estado[estado.length-1]);
-            return estado;
-        }
-
-        function nrz_invert(sinal){
-            var estado = [...sinal];
-            var estadoAnterior = 1;
-            for(var i =0; i < sinal.length;i++){
-                if(sinal[i] == 1){
-                    estado[i] = inverte(estadoAnterior); 
-                    estadoAnterior = estado[i];
-                }else{
-                    estado[i] = estadoAnterior;
-                }
-            }
-            estado.push(estado[estado.length-1]);
-            return estado;
+    function inverte(sinal) {
+        return sinal * -1;
+    }
 
 
-        }
-
-        function ami(sinal){
-            var estado = [...sinal];
-            var estadoAnterior = -1;
-            for(var i =0; i < sinal.length;i++){
-                if(sinal[i] == 1){
-                    estado[i] = inverte(estadoAnterior); 
-                    estadoAnterior = estado[i];
-                }else if(sinal[i] == 0){
-                    estado[i] = 0;
-                }
-            }
-            estado.push(estado[estado.length-1]);
-            return estado;
-
-            
-        }
-
-        function pseudoternary(sinal){
-            var estado = [...sinal];
-            var estadoAnterior = -1;
-            for(var i =0; i < sinal.length;i++){
-                if(sinal[i] == 0){
-                    estado[i] = inverte(estadoAnterior); 
-                    estadoAnterior = estado[i];
-                }else if(sinal[i] == 1){
-                    estado[i] = 0;
-                }
-            }
-            estado.push(estado[estado.length-1]);
-
-            return estado;
-
-        }
-
-        function manchester(sinal){
-            var estado = new Array(sinal.length * 2).fill(0);           
-            for(var i =0; i < estado.length;i++){
-                
-                if(sinal[i] == 0){
-                    estado[i*2] = 1;
-                    estado[i*2+1] = -1;
-                } else if(sinal[i] == 1){
-                    estado[i*2] = -1;
-                    estado[i*2+1] = 1;
-                }
-                
-            }
-            estado.push(estado[estado.length-1]);
-
-            return estado;
-
-        }
-    
-        function inverteMD(sinal){
-            if(sinal == 1){
-                return 0;
-            }
-            if(sinal == 0){
-                return 1;
+    function nrz_level(sinal) {
+        var estado = [...sinal];
+        for (var i = 0; i < sinal.length; i++) {
+            if (sinal[i] == 0) {
+                estado[i] = 1;
+            } else if (sinal[i] == 1) {
+                estado[i] = -1;
             }
         }
+        estado.push(estado[estado.length - 1]);
+        return estado;
+    }
 
-        function manchester_diferencial(sinal){
-            var estado = new Array(sinal.length * 2).fill(0);           
-            var ultimoEstado = 1;
-            
-            for(var i =0,j=1; i < estado.length; i++,j++){
-           
-                if(sinal[i] == 0){
-                    estado[i*2] = inverte(ultimoEstado);
-                    estado[i*2+1] = ultimoEstado;
-                }else if(sinal[i] == 1){
-                    estado[i*2] = ultimoEstado;
-                    estado[i*2+1] = inverte(ultimoEstado);
-                }
-                ultimoEstado = estado[i*2+1];
-                
+    function nrz_invert(sinal) {
+        var estado = [...sinal];
+        var estadoAnterior = 1;
+        for (var i = 0; i < sinal.length; i++) {
+            if (sinal[i] == 1) {
+                estado[i] = inverte(estadoAnterior);
+                estadoAnterior = estado[i];
+            } else {
+                estado[i] = estadoAnterior;
             }
-            estado.push(estado[estado.length-1]);
-
-            return estado;
         }
+        estado.push(estado[estado.length - 1]);
+        return estado;
 
-    </script>
+
+    }
+
+    function ami(sinal) {
+        var estado = [...sinal];
+        var estadoAnterior = -1;
+        for (var i = 0; i < sinal.length; i++) {
+            if (sinal[i] == 1) {
+                estado[i] = inverte(estadoAnterior);
+                estadoAnterior = estado[i];
+            } else if (sinal[i] == 0) {
+                estado[i] = 0;
+            }
+        }
+        estado.push(estado[estado.length - 1]);
+        return estado;
 
 
-    <script>
+    }
+
+    function pseudoternary(sinal) {
+        var estado = [...sinal];
+        var estadoAnterior = -1;
+        for (var i = 0; i < sinal.length; i++) {
+            if (sinal[i] == 0) {
+                estado[i] = inverte(estadoAnterior);
+                estadoAnterior = estado[i];
+            } else if (sinal[i] == 1) {
+                estado[i] = 0;
+            }
+        }
+        estado.push(estado[estado.length - 1]);
+
+        return estado;
+
+    }
+
+    function manchester(sinal) {
+        var estado = new Array(sinal.length * 2).fill(0);
+        for (var i = 0; i < estado.length; i++) {
+
+            if (sinal[i] == 0) {
+                estado[i * 2] = 1;
+                estado[i * 2 + 1] = -1;
+            } else if (sinal[i] == 1) {
+                estado[i * 2] = -1;
+                estado[i * 2 + 1] = 1;
+            }
+
+        }
+        estado.push(estado[estado.length - 1]);
+
+        return estado;
+
+    }
+
+    function inverteMD(sinal) {
+        if (sinal == 1) {
+            return 0;
+        }
+        if (sinal == 0) {
+            return 1;
+        }
+    }
+
+    function manchester_diferencial(sinal) {
+        var estado = new Array(sinal.length * 2).fill(0);
+        var ultimoEstado = 1;
+
+        for (var i = 0, j = 1; i < estado.length; i++, j++) {
+
+            if (sinal[i] == 0) {
+                estado[i * 2] = inverte(ultimoEstado);
+                estado[i * 2 + 1] = ultimoEstado;
+            } else if (sinal[i] == 1) {
+                estado[i * 2] = ultimoEstado;
+                estado[i * 2 + 1] = inverte(ultimoEstado);
+            }
+            ultimoEstado = estado[i * 2 + 1];
+
+        }
+        estado.push(estado[estado.length - 1]);
+
+        return estado;
+    }
+
+</script>
+
+<script>
+    function drawGraph(signal) {
         let intervalLen = 1;
-        let signalSequence = [1,0,1,0,0];
-        let estadoSequence = this.manchester_diferencial(signalSequence);
-        let signalIntervals = [...Array(estadoSequence.length).keys()];
-        signalIntervals = signalIntervals.map((x) => { return x * intervalLen});
+        let signalIntervals = [...Array(signal.length).keys()];
+        signalIntervals = signalIntervals.map((x) => { return x * intervalLen });
 
         const data = {
-            x: signalIntervals, 
-            y: estadoSequence,
+            x: signalIntervals,
+            y: signal,
             mode: 'lines',
             type: 'scatter',
             line: {
@@ -179,29 +201,131 @@
         };
 
         Plotly.newPlot('myPlot', [data], layout, config);
-    </script>
+    }
+</script>
 
-    
+<script>
+    // mounted
+    let signalSequence = [0, 1, 0, 0, 1, 1, 1, 0];
+    let selectedType = 'NRZ Level';
+    this.drawGraph(this.nrz_level(signalSequence));
+</script>
 
-    <style>
-        .container-header {
-            display: flex;
-            font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background-color: #295264;
-            color: #b9d9b4;
-            height: 120px;
-            border-radius: 10px;
-            margin-top: 20px;
-            margin-bottom: 20px;
+<script>
+    // watcher
+    function handleChangeInput(value) {
+        signalInput = value;
+        signalSequence = signalInput.split('').map(bit => parseInt(bit));
+        this.handleSelectType(selectedType);
+    }
 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
-            /* Define o espalhamento da sombra */
-            box-shadow: 0 4px 6px 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-    </style>
-      
+    function handleSelectType(value) {
+        let estadoSequence = [];
+        const selectedValue = value;
+
+        if (selectedValue === "NRZ Level") estadoSequence = this.nrz_level(signalSequence);
+        else if (selectedValue === "NRZ Invert") estadoSequence = this.nrz_invert(signalSequence);
+        else if (selectedValue === "AMI") estadoSequence = this.ami(signalSequence);
+        else if (selectedValue === "Pseudoternary") estadoSequence = this.pseudoternary(signalSequence);
+        else if (selectedValue === "Manchester") estadoSequence = this.manchester(signalSequence);
+        else if (selectedValue === "Manchester Diferencial") estadoSequence = this.manchester_diferencial(signalSequence);
+
+        selectedType = value;
+        this.drawGraph(estadoSequence);
+    }
+</script>
+
+
+
+<style>
+    label {
+        display: block;
+        margin-bottom: 10px;
+        margin-top: 20px;
+    }
+
+    .container-header {
+        display: flex;
+        font-family: Arial, sans-serif;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: #295264;
+        color: #ffffff;
+        height: 120px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .container-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+
+    .input-card {
+        display: flex;
+        font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+        font-size: larger;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #295264;
+        height: 250px;
+        width: 50%;
+        border-radius: 10px;
+        margin-bottom: 20px;
+
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+        /* Define o espalhamento da sombra */
+        box-shadow: 0 4px 6px 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-xl {
+        font-size: 1.2em;
+    }
+
+    .text-lg {
+        font-size: 1.1em;
+    }
+
+
+    .base-dropdown {
+        width: 400px;
+        background-color: #fff;
+        color: #333;
+        font-size: 16px;
+        padding: 12px 30px 12px 12px;
+        border: none;
+        outline: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23295e65'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        background-size: 18px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .base-input {
+        width: 400px;
+        background-color: #f7f7f7;
+        color: #333;
+        font-size: 16px;
+        padding: 12px;
+        border: none;
+        outline: none;
+        border-radius: 8px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
 </html>
