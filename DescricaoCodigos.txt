@@ -1,0 +1,40 @@
+MLT-3 (Multiline Transmission Three Level):
+
+Lei de formação:
+	Quando o bit 0 aparece, nada acontece;
+	Quando o bit 1 aparece:
+		Quando o bit 1 não-zero anterior é positivo, decremente o nível;
+		Quando o bit 1 não-zero anterior é negativo, incremente o nível.
+
+Sincronismo:
+	Feito através de um bit de violação de regra, inserido na transmissão sempre que três zeros consecutivos são detectados no sinal.
+
+Componente DC: 
+	Apresenta componente DC devido à tecnica de codificação. Necessita de técnicas de filtragem para removê-lo do sinal.
+
+Imunidade a ruídos:
+	Possui boa imunidade, graças à técnica de codificação do MLT-3 e ao uso do bit de violação de regra.
+
+Aplicação prática:
+	Fast Ethernet (100BASE-TX), Gigabit Ethernet (1000BASE-T).
+
+----------------------------------
+
+CMI (Código Manchester Invertido): 
+
+Lei de formação: 
+	Quando o bit 0 aparece, inverta o nível duas vezes num mesmo período T;
+	Quando o bit 1 aparece, inverta o nível uma vez.
+
+Sincronismo:
+	Feito através da utilização de um sinal de clock externo, responsável por indicar o momento exato em que cada bit deve ser lido ou transmitido. 
+
+Componente DC:
+	Removido pela técnica de codificação utilizada, que envolve a inversão da polaridade do sinal em cada bit e mantém a média do sinal em zero.
+
+Imunidade a ruídos:
+	Também possui uma boa imunidade a ruídos devido à sua técnica de codificação e a técnicas de detecção de erros, como a verificação de paridade. 
+
+Aplicação prática:
+	Ethernet 10BASE-T, Token Ring, FDDI.
+	Norma G.703 da ITU-T para PCM multiplexado a 140 Mbits/s.
