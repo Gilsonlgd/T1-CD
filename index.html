@@ -136,20 +136,11 @@
 
     }
 
-    function inverteMD(sinal) {
-        if (sinal == 1) {
-            return 0;
-        }
-        if (sinal == 0) {
-            return 1;
-        }
-    }
-
     function manchester_diferencial(sinal) {
         var estado = new Array(sinal.length * 2).fill(0);
         var ultimoEstado = 1;
 
-        for (var i = 0, j = 1; i < estado.length; i++, j++) {
+        for (var i = 0; i < estado.length; i++) {
 
             if (sinal[i] == 0) {
                 estado[i * 2] = inverte(ultimoEstado);
