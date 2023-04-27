@@ -31,6 +31,7 @@
                         <option value="Pseudoternary">Pseudoternary</option>
                         <option value="Manchester">Manchester</option>
                         <option value="Manchester Diferencial">Manchester Diferencial</option>
+                        <option value="MLT-3">MLT-3</option>
                     </select>
                 </div>
                 <div class="col-12">
@@ -163,6 +164,31 @@
 
         return estado;
     }
+    
+    function mlt3(sinal) {
+        var estado = [...sinal];
+        var ultimoEstadoNaoZero = 0;
+        var ultimoEstado = 0;
+
+        for (var i = 0; i < estado.length; i++) {
+
+            if (sinal[i] == 0) {
+                estado[i] = ultimoEstado;
+            } else if (sinal[i] == 1) {
+                if (ultimoEstadoNaoZero > 0)
+                    estado[i] = ultimoEstado - 1;
+                else
+                    estado[i] = ultimoEstado + 1;
+
+                if (estado[i] != 0)
+                    ultimoEstadoNaoZero = estado[i];
+                ultimoEstado = estado[i];
+            }
+        }
+        estado.push(estado[estado.length - 1]);
+
+        return estado;
+    }
 
 </script>
 
@@ -234,6 +260,7 @@
         else if (selectedValue === "Pseudoternary") estadoSequence = this.pseudoternary(signalSequence);
         else if (selectedValue === "Manchester") estadoSequence = this.manchester(signalSequence);
         else if (selectedValue === "Manchester Diferencial") estadoSequence = this.manchester_diferencial(signalSequence);
+        else if (selectedValue === "MLT-3") estadoSequence = this.mlt3(signalSequence);
 
         selectedType = value;
         this.drawGraph(estadoSequence);
