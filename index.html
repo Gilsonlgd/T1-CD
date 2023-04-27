@@ -269,7 +269,7 @@
         const selectedValue = value;
 
         if (selectedValue === "-") {
-            estadoSequence = signalSequence;
+            estadoSequence = [...signalSequence];
             estadoSequence.push(signalSequence[signalSequence.length - 1]);
         }
         else if (selectedValue === "NRZ Level") estadoSequence = this.nrz_level(signalSequence);
