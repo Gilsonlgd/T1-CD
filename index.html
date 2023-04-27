@@ -21,7 +21,7 @@
         <div class="input-card">
             <div class="row">
                 <div class="col-12">
-                    <label class="text-xl" for="tipos">Escolha uma método:</label>
+                    <label class="text-xl" for="tipos">Escolha um método:</label>
                     <select class="base-dropdown text-lg" id="tipos" name="tipos"
                         onchange="handleSelectType(this.value)">
                         <option value="-">Sinal Original</option>
@@ -32,6 +32,7 @@
                         <option value="Manchester">Manchester</option>
                         <option value="Manchester Diferencial">Manchester Diferencial</option>
                         <option value="MLT-3">MLT-3</option>
+                        <option value="CMI">CMI</option>
                     </select>
                 </div>
                 <div class="col-12">
@@ -171,7 +172,6 @@
         var ultimoEstado = 0;
 
         for (var i = 0; i < estado.length; i++) {
-
             if (sinal[i] == 0) {
                 estado[i] = ultimoEstado;
             } else if (sinal[i] == 1) {
@@ -184,6 +184,24 @@
                     ultimoEstadoNaoZero = estado[i];
                 ultimoEstado = estado[i];
             }
+        }
+        estado.push(estado[estado.length - 1]);
+
+        return estado;
+    }
+    
+    function cmi(sinal) {
+        var estado = new Array(sinal.length * 2).fill(0);
+        var ultimoEstado = -1;
+
+        for (var i = 0; i < sinal.length; i++) {
+            if (sinal[i] == 0) {
+                estado[i * 2] = inverte(ultimoEstado);
+                estado[i * 2 + 1] = inverte(estado[i * 2]);
+            } else if (sinal[i] == 1) {
+                estado[i * 2] = estado[i * 2 + 1] = inverte(ultimoEstado);
+            }
+            ultimoEstado = estado[i * 2 + 1];
         }
         estado.push(estado[estado.length - 1]);
 
@@ -261,6 +279,7 @@
         else if (selectedValue === "Manchester") estadoSequence = this.manchester(signalSequence);
         else if (selectedValue === "Manchester Diferencial") estadoSequence = this.manchester_diferencial(signalSequence);
         else if (selectedValue === "MLT-3") estadoSequence = this.mlt3(signalSequence);
+        else if (selectedValue === "CMI") estadoSequence = this.cmi(signalSequence);
 
         selectedType = value;
         this.drawGraph(estadoSequence);
