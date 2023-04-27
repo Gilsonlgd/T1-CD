@@ -40,14 +40,14 @@ Aplicação prática:
 	Norma G.703 da ITU-T para PCM multiplexado a 140 Mbits/s.
 ----------------------------------
 NRZ-L:
-    a voltagem eh igual ao estado, entao se eh 0 o estado eh 0 , eh normal
+    A voltagem eh igual ao estado, entao se eh 0 o estado eh 0 , eh normal
 NRZI:
-    se o proximo sinal for 1 ele inverte o estado, se o proximo sinal for 0 ele mantem
+    Se o proximo sinal for 1 ele inverte o estado, se o proximo sinal for 0 ele mantem
 AMI:
-    quando o sinal eh 0 , o estado eh 0, quando o sinal eh 1 ele fica alternando entre positivo e negativo
+    Quando o sinal eh 0 , o estado eh 0, quando o sinal eh 1 ele fica alternando entre positivo e negativo
     salvando o ultimo estado de quando o sinal for 1, para poder ficar alternando
 PSEUDOTERNARY:
-    o contrario do ami
+    O contrario do ami
     quando o sinal eh 1 , o estado eh 1, quando o sinal for 0 ele fica alternando entre positivo e negativo
     salvando o ultimo estado de quando o sinal for 0, para poder ficar alternando
 MANCHESTER:
@@ -55,7 +55,7 @@ MANCHESTER:
    o sinal 0 representa um descida do estado, se for seguido de outro zero precisa subir rapidamente pra depois descer dnv
    o sinal 1 representa a subida do estado, se for seguido de outro um tem q descer rapidamente para subir dnv
 MANCHESTER DIFERENCIAL:
-   ele se diferencia do manchester pois ele muda o estado dependendo do proximo sinal
+   Ele se diferencia do manchester pois ele muda o estado dependendo do proximo sinal
     se o proximo sinal for 1 ele nao inverte o estado
     se o proximo sinal for 0 ele inverte o estado
 
